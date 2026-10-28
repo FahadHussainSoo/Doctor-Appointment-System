@@ -1,0 +1,265 @@
+/* ==========================================================================
+   MediBook — auth.css (Phase 2A)
+   Split-screen Login / Registration / Forgot Password.
+   Built on tokens from variables.css. Pure presentation — no backend
+   logic lives here or depends on anything in this file.
+   ========================================================================== */
+
+.mb-auth-section {
+  min-height: calc(100vh - 108px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(var(--color-purple-rgb), .16), transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(var(--color-secondary-rgb), .18), transparent 45%),
+    linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 45%, #ECFEFF 100%);
+}
+body.mb-dash-body .mb-auth-section { min-height: 100vh; }
+
+/* Decorative floating blobs behind the card */
+.mb-auth-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: .5;
+  z-index: 0;
+  animation: mbBlobFloat 9s ease-in-out infinite;
+}
+.mb-auth-blob.b1 { width: 320px; height: 320px; top: -80px; left: -80px; background: rgba(var(--color-primary-rgb), .35); }
+.mb-auth-blob.b2 { width: 280px; height: 280px; bottom: -60px; right: -60px; background: rgba(var(--color-secondary-rgb), .35); animation-delay: -3s; }
+.mb-auth-blob.b3 { width: 200px; height: 200px; bottom: 20%; left: 6%; background: rgba(var(--color-pink-rgb), .3); animation-delay: -6s; }
+
+@keyframes mbBlobFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(18px, -22px) scale(1.08); }
+}
+
+/* ---------- Animated Card ---------- */
+.mb-auth-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 980px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg), 0 30px 60px -20px rgba(79, 70, 229, .25);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(28px) scale(.98);
+  animation: mbCardIn .65s cubic-bezier(.21,.98,.31,1) forwards;
+}
+.mb-auth-card.mb-auth-card-wide { max-width: 1080px; }
+@keyframes mbCardIn {
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ---------- Illustration side ---------- */
+.mb-auth-illustration {
+  position: relative;
+  background: var(--gradient-primary);
+  color: #fff;
+  padding: 3rem 2.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+.mb-auth-illustration::before,
+.mb-auth-illustration::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .08);
+}
+.mb-auth-illustration::before { width: 260px; height: 260px; top: -90px; right: -90px; }
+.mb-auth-illustration::after { width: 180px; height: 180px; bottom: -70px; left: -50px; background: rgba(255,255,255,.06); }
+.mb-auth-illustration-art { position: relative; z-index: 1; margin-bottom: 1.75rem; animation: mbFloatArt 5s ease-in-out infinite; }
+@keyframes mbFloatArt {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+.mb-auth-illustration h3 { position: relative; z-index: 1; font-size: var(--fs-2xl); font-weight: 700; margin-bottom: .6rem; }
+.mb-auth-illustration p { position: relative; z-index: 1; font-size: var(--fs-sm); color: rgba(255,255,255,.85); line-height: 1.7; max-width: 320px; }
+.mb-auth-illustration-badges { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.75rem; }
+.mb-auth-illustration-badges span {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.22);
+  padding: .4rem .8rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+}
+
+/* ---------- Form side ---------- */
+.mb-auth-form-col {
+  padding: 2.75rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 88vh;
+  overflow-y: auto;
+}
+.mb-auth-header { margin-bottom: 1.75rem; }
+.mb-auth-brand { display: inline-flex; align-items: center; gap: .55rem; margin-bottom: 1.1rem; }
+.mb-auth-brand .mb-brand-icon { width: 38px; height: 38px; font-size: 1rem; }
+.mb-auth-brand span { font-weight: 700; font-size: var(--fs-lg); color: var(--color-text); }
+.mb-auth-title { font-size: var(--fs-3xl); font-weight: 800; color: var(--color-text); letter-spacing: -.02em; margin-bottom: .4rem; }
+.mb-auth-subtitle { color: var(--color-text-muted); font-size: var(--fs-sm); }
+
+.mb-auth-alert {
+  display: flex; align-items: flex-start; gap: .6rem;
+  padding: .8rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  margin-bottom: 1.25rem;
+  animation: mbCardIn .4s ease forwards;
+}
+.mb-auth-alert.error   { background: var(--color-danger-tint);  color: #B91C1C; border: 1px solid rgba(var(--color-danger-rgb), .25); }
+.mb-auth-alert.success { background: var(--color-success-tint); color: #067A55; border: 1px solid rgba(var(--color-success-rgb), .25); }
+.mb-auth-alert i { margin-top: .15rem; }
+
+.mb-auth-form { display: flex; flex-direction: column; gap: 1.25rem; }
+.mb-auth-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+/* ---------- Floating label fields ---------- */
+.mb-field { position: relative; }
+.mb-field-icon {
+  position: absolute;
+  left: 1rem; top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-soft);
+  font-size: .95rem;
+  transition: color var(--transition-fast);
+  pointer-events: none;
+}
+.mb-input, .mb-textarea {
+  width: 100%;
+  padding: 1.15rem 1rem .45rem 2.6rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-base);
+  font-size: var(--fs-base);
+  color: var(--color-text);
+  background: #FBFCFE;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+.mb-textarea { padding-top: 1.35rem; resize: vertical; min-height: 84px; }
+.mb-field.no-icon .mb-input,
+.mb-field.no-icon .mb-textarea { padding-left: 1rem; }
+.mb-field.has-toggle .mb-input { padding-right: 2.8rem; }
+
+.mb-input:focus, .mb-textarea:focus {
+  border-color: var(--color-primary);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(var(--color-primary-rgb), .12);
+}
+.mb-input:focus ~ .mb-field-icon { color: var(--color-primary); }
+
+.mb-floating-label {
+  position: absolute;
+  left: 2.6rem; top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--fs-base);
+  color: var(--color-text-soft);
+  background: transparent;
+  padding: 0 .2rem;
+  pointer-events: none;
+  transition: transform var(--transition-fast), font-size var(--transition-fast), color var(--transition-fast), top var(--transition-fast);
+  transform-origin: left center;
+}
+.mb-field.no-icon .mb-floating-label { left: 1rem; }
+.mb-textarea ~ .mb-floating-label { top: 1.35rem; transform: none; }
+
+.mb-input:focus ~ .mb-floating-label,
+.mb-input:not(:placeholder-shown) ~ .mb-floating-label,
+.mb-textarea:focus ~ .mb-floating-label,
+.mb-textarea:not(:placeholder-shown) ~ .mb-floating-label {
+  top: .72rem;
+  transform: translateY(0) scale(.78);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+.mb-textarea:focus ~ .mb-floating-label,
+.mb-textarea:not(:placeholder-shown) ~ .mb-floating-label { top: .5rem; }
+
+/* select / date always show label floated (no placeholder-shown support) */
+.mb-field.mb-field-static .mb-floating-label {
+  top: .72rem; transform: translateY(0) scale(.78); color: var(--color-primary); font-weight: 600;
+}
+.mb-field.mb-field-static .mb-input { padding-top: 1.15rem; }
+
+/* ---------- Password toggle ---------- */
+.mb-pass-toggle {
+  position: absolute;
+  right: .9rem; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none;
+  color: var(--color-text-soft);
+  cursor: pointer;
+  font-size: .95rem;
+  padding: .3rem;
+  transition: color var(--transition-fast);
+}
+.mb-pass-toggle:hover { color: var(--color-primary); }
+
+/* ---------- Row helpers ---------- */
+.mb-auth-meta-row { display: flex; align-items: center; justify-content: space-between; font-size: var(--fs-sm); }
+.mb-auth-remember { display: flex; align-items: center; gap: .5rem; color: var(--color-text-muted); }
+.mb-auth-remember input { accent-color: var(--color-primary); width: 16px; height: 16px; }
+.mb-auth-link { color: var(--color-primary); font-weight: 600; text-decoration: none; }
+.mb-auth-link:hover { text-decoration: underline; }
+
+/* ---------- Modern submit button ---------- */
+.mb-auth-btn {
+  width: 100%;
+  display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
+  padding: .95rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  background-size: 160% 160%;
+  color: #fff;
+  font-weight: 700;
+  font-size: var(--fs-base);
+  cursor: pointer;
+  box-shadow: var(--shadow-primary);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-position var(--transition-slow);
+}
+.mb-auth-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(var(--color-primary-rgb), .4); background-position: 100% 0; }
+.mb-auth-btn:active { transform: translateY(0); }
+.mb-auth-btn i { transition: transform var(--transition-fast); }
+.mb-auth-btn:hover i.fa-arrow-right { transform: translateX(3px); }
+
+.mb-auth-divider { display: flex; align-items: center; gap: .8rem; color: var(--color-text-soft); font-size: var(--fs-xs); margin: .25rem 0; }
+.mb-auth-divider::before, .mb-auth-divider::after { content: ""; flex: 1; height: 1px; background: var(--color-border); }
+
+.mb-auth-footer-text { text-align: center; font-size: var(--fs-sm); color: var(--color-text-muted); margin-top: .25rem; }
+
+.mb-auth-back {
+  display: inline-flex; align-items: center; gap: .45rem;
+  font-size: var(--fs-sm); color: var(--color-text-muted); text-decoration: none;
+  margin-bottom: 1.25rem;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+.mb-auth-back:hover { color: var(--color-primary); transform: translateX(-3px); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .mb-auth-card { grid-template-columns: 1fr; max-width: 480px; }
+  .mb-auth-illustration { display: none; }
+  .mb-auth-form-col { padding: 2.25rem 1.5rem; max-height: none; }
+}
+@media (max-width: 480px) {
+  .mb-auth-section { padding: 1.5rem .85rem; }
+  .mb-auth-row { grid-template-columns: 1fr; gap: 1.25rem; }
+  .mb-auth-form-col { padding: 1.85rem 1.25rem; }
+  .mb-auth-title { font-size: var(--fs-2xl); }
+}

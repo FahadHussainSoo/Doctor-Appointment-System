@@ -1,0 +1,294 @@
+/* ==========================================================================
+   MediBook — dashboard.css (Phase 2B)
+   Admin / Doctor / Patient dashboard widgets: gradient stat cards,
+   glassmorphism panels, progress bars, donut/bar charts (pure CSS),
+   calendar widget, notifications, recent-activity feed, quick actions.
+   Builds on tokens from variables.css. Presentation only — no queries,
+   no backend behaviour lives here.
+   ========================================================================== */
+
+.db-grid { display: grid; gap: 1.5rem; }
+.db-fade-in { animation: dbFadeIn .55s cubic-bezier(.21,.98,.31,1) both; }
+.db-fade-in.d1 { animation-delay: .05s; }
+.db-fade-in.d2 { animation-delay: .1s; }
+.db-fade-in.d3 { animation-delay: .15s; }
+.db-fade-in.d4 { animation-delay: .2s; }
+@keyframes dbFadeIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ---------- Gradient Stat Cards ---------- */
+.db-stats-row { grid-template-columns: repeat(4, 1fr); margin-bottom: 1.75rem; }
+@media (max-width: 1100px) { .db-stats-row { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px)  { .db-stats-row { grid-template-columns: 1fr; } }
+
+.db-stat-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  color: #fff;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  isolation: isolate;
+}
+.db-stat-card::after {
+  content: "";
+  position: absolute;
+  top: -30%; right: -20%;
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.14);
+  z-index: -1;
+  transition: transform var(--transition-slow);
+}
+.db-stat-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+.db-stat-card:hover::after { transform: scale(1.35); }
+
+.db-grad-1 { background: var(--gradient-primary); }
+.db-grad-2 { background: linear-gradient(135deg, #06B6D4 0%, #3B82F6 100%); }
+.db-grad-3 { background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%); }
+.db-grad-4 { background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%); }
+.db-grad-5 { background: linear-gradient(135deg, #10B981 0%, #06B6D4 100%); }
+.db-grad-6 { background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%); }
+
+.db-stat-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.1rem; }
+.db-stat-icon {
+  width: 46px; height: 46px;
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.15rem;
+}
+.db-stat-trend {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  padding: .25rem .55rem;
+  border-radius: var(--radius-pill);
+  background: rgba(255,255,255,.18);
+  display: inline-flex; align-items: center; gap: .25rem;
+}
+.db-stat-value { font-size: 2.1rem; font-weight: 800; line-height: 1; margin-bottom: .35rem; letter-spacing: -.02em; }
+.db-stat-label { font-size: var(--fs-sm); color: rgba(255,255,255,.88); font-weight: 500; }
+
+/* ---------- Glass panel (shared container) ---------- */
+.db-panel {
+  background: rgba(255,255,255,.7);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255,255,255,.5);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+  transition: box-shadow var(--transition-base);
+}
+.db-panel:hover { box-shadow: var(--shadow-md); }
+.db-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+.db-panel-title { font-size: var(--fs-lg); font-weight: 700; color: var(--color-text); display: flex; align-items: center; gap: .55rem; }
+.db-panel-title i { color: var(--color-primary); }
+.db-panel-link { font-size: var(--fs-sm); font-weight: 600; color: var(--color-primary); text-decoration: none; }
+.db-panel-link:hover { text-decoration: underline; }
+
+.db-main-grid { grid-template-columns: 1.6fr 1fr; align-items: start; }
+@media (max-width: 1100px) { .db-main-grid { grid-template-columns: 1fr; } }
+
+/* ---------- Progress bars ---------- */
+.db-progress-item { margin-bottom: 1.25rem; }
+.db-progress-item:last-child { margin-bottom: 0; }
+.db-progress-labels { display: flex; align-items: center; justify-content: space-between; font-size: var(--fs-sm); margin-bottom: .5rem; }
+.db-progress-labels .name { color: var(--color-text); font-weight: 600; }
+.db-progress-labels .pct { color: var(--color-primary); font-weight: 700; }
+.db-progress-track {
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary-tint);
+  overflow: hidden;
+}
+.db-progress-fill {
+  height: 100%;
+  width: 0;
+  border-radius: var(--radius-pill);
+  background: var(--gradient-primary);
+  position: relative;
+  transition: width 1.1s cubic-bezier(.21,.98,.31,1);
+}
+.db-progress-fill.grad-cool  { background: linear-gradient(90deg, #06B6D4, #3B82F6); }
+.db-progress-fill.grad-warm  { background: linear-gradient(90deg, #F59E0B, #EF4444); }
+.db-progress-fill.grad-green { background: linear-gradient(90deg, #10B981, #06B6D4); }
+.db-progress-fill::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+  animation: dbShimmer 2.4s ease-in-out infinite;
+}
+@keyframes dbShimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+/* ---------- Quick Actions ---------- */
+.db-quick-actions { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.db-qa-btn {
+  display: flex; flex-direction: column; align-items: flex-start; gap: .6rem;
+  padding: 1.1rem 1.15rem;
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  color: var(--color-text);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+.db-qa-btn:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: transparent; color: var(--color-text); }
+.db-qa-icon {
+  width: 40px; height: 40px;
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-size: 1rem;
+}
+.db-qa-btn span.db-qa-label { font-weight: 600; font-size: var(--fs-sm); }
+.db-qa-btn small { color: var(--color-text-soft); font-size: var(--fs-xs); }
+
+/* ---------- Recent Activity feed ---------- */
+.db-activity-list { list-style: none; margin: 0; padding: 0; }
+.db-activity-item {
+  display: flex; gap: .9rem;
+  padding: .85rem 0;
+  border-bottom: 1px dashed var(--color-border);
+  transition: background var(--transition-fast);
+}
+.db-activity-item:last-child { border-bottom: none; }
+.db-activity-dot {
+  flex-shrink: 0;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .85rem;
+  color: #fff;
+}
+.db-activity-dot.confirmed { background: linear-gradient(135deg,#10B981,#06B6D4); }
+.db-activity-dot.scheduled { background: linear-gradient(135deg,#F59E0B,#F97316); }
+.db-activity-dot.completed { background: linear-gradient(135deg,#6366F1,#8B5CF6); }
+.db-activity-dot.cancelled { background: linear-gradient(135deg,#EF4444,#F43F5E); }
+.db-activity-body { flex: 1; min-width: 0; }
+.db-activity-title { font-size: var(--fs-sm); font-weight: 600; color: var(--color-text); }
+.db-activity-meta { font-size: var(--fs-xs); color: var(--color-text-soft); margin-top: .15rem; }
+.db-activity-badge {
+  font-size: var(--fs-xs); font-weight: 700;
+  padding: .2rem .55rem; border-radius: var(--radius-pill);
+  align-self: center; white-space: nowrap;
+}
+.db-badge-confirmed { background: var(--color-success-tint); color: #067A55; }
+.db-badge-scheduled { background: rgba(245,158,11,.15); color: #B45309; }
+.db-badge-completed { background: var(--color-primary-tint); color: var(--color-primary); }
+.db-badge-cancelled { background: var(--color-danger-tint); color: #B91C1C; }
+
+.db-empty { text-align: center; padding: 2rem 1rem; color: var(--color-text-soft); }
+.db-empty i { font-size: 2rem; margin-bottom: .6rem; display: block; opacity: .6; }
+
+/* ---------- Notifications ---------- */
+.db-notif-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .65rem; }
+.db-notif-item {
+  display: flex; gap: .75rem;
+  padding: .75rem .85rem;
+  border-radius: var(--radius-md);
+  background: #F9FAFB;
+  border: 1px solid var(--color-border);
+  transition: transform var(--transition-fast), background var(--transition-fast);
+}
+.db-notif-item:hover { transform: translateX(3px); background: #F3F4F6; }
+.db-notif-item.unread { background: var(--color-primary-tint); border-color: rgba(var(--color-primary-rgb), .18); }
+.db-notif-icon {
+  width: 32px; height: 32px; flex-shrink: 0;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .8rem; color: #fff;
+  background: var(--gradient-primary);
+}
+.db-notif-item.warn .db-notif-icon { background: linear-gradient(135deg,#F59E0B,#F97316); }
+.db-notif-item.danger .db-notif-icon { background: linear-gradient(135deg,#EF4444,#F43F5E); }
+.db-notif-text { font-size: var(--fs-sm); color: var(--color-text); line-height: 1.45; }
+.db-notif-time { font-size: var(--fs-xs); color: var(--color-text-soft); margin-top: .15rem; }
+
+/* ---------- Donut chart (pure CSS conic-gradient) ---------- */
+.db-donut-wrap { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+.db-donut {
+  --p1: 0; --p2: 0; --p3: 0; --p4: 0;
+  width: 132px; height: 132px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: conic-gradient(
+    #10B981 0 calc(var(--p1) * 1%),
+    #F59E0B calc(var(--p1) * 1%) calc((var(--p1) + var(--p2)) * 1%),
+    #6366F1 calc((var(--p1) + var(--p2)) * 1%) calc((var(--p1) + var(--p2) + var(--p3)) * 1%),
+    #EF4444 calc((var(--p1) + var(--p2) + var(--p3)) * 1%) 100%
+  );
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.db-donut::before {
+  content: "";
+  position: absolute;
+  width: 78px; height: 78px;
+  border-radius: 50%;
+  background: var(--color-surface, #fff);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.03);
+}
+.db-donut-center { position: relative; z-index: 1; text-align: center; }
+.db-donut-center .num { font-size: var(--fs-xl); font-weight: 800; color: var(--color-text); display: block; line-height: 1; }
+.db-donut-center .lbl { font-size: .62rem; text-transform: uppercase; letter-spacing: .05em; color: var(--color-text-soft); }
+.db-donut-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .55rem; flex: 1; min-width: 140px; }
+.db-donut-legend li { display: flex; align-items: center; gap: .55rem; font-size: var(--fs-sm); color: var(--color-text-muted); }
+.db-donut-legend .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.db-donut-legend .val { margin-left: auto; font-weight: 700; color: var(--color-text); }
+
+/* ---------- Bar chart (pure CSS, last 7 days) ---------- */
+.db-bar-chart { display: flex; align-items: flex-end; gap: .6rem; height: 140px; padding-top: .5rem; }
+.db-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: .45rem; }
+.db-bar-track { width: 100%; max-width: 26px; height: 100%; display: flex; align-items: flex-end; border-radius: var(--radius-sm); background: var(--color-primary-tint); overflow: hidden; }
+.db-bar-fill { width: 100%; border-radius: var(--radius-sm) var(--radius-sm) 0 0; background: var(--gradient-primary); height: 0; transition: height 1s cubic-bezier(.21,.98,.31,1); }
+.db-bar-col .day-lbl { font-size: .65rem; color: var(--color-text-soft); font-weight: 600; }
+.db-bar-col .day-val { font-size: .68rem; color: var(--color-text); font-weight: 700; }
+
+/* ---------- Calendar widget ---------- */
+.db-calendar-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: .9rem; }
+.db-calendar-head .month { font-weight: 700; color: var(--color-text); font-size: var(--fs-base); }
+.db-calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: .3rem; text-align: center; }
+.db-calendar-grid .dow { font-size: .65rem; font-weight: 700; color: var(--color-text-soft); text-transform: uppercase; padding-bottom: .3rem; }
+.db-cal-day {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+.db-cal-day.other-month { color: var(--color-text-soft); opacity: .35; }
+.db-cal-day.today { background: var(--gradient-primary); color: #fff; font-weight: 700; }
+.db-cal-day.has-appt:not(.today)::after {
+  content: "";
+  position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--color-primary);
+}
+.db-cal-day.has-appt:not(.today) { background: var(--color-primary-tint); font-weight: 700; color: var(--color-primary); }
+.db-calendar-legend { display: flex; align-items: center; gap: .5rem; margin-top: 1rem; font-size: var(--fs-xs); color: var(--color-text-soft); }
+.db-calendar-legend .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-primary); }
+
+/* ---------- Clickable day cells (Phase 3B — Doctor Schedule calendar) ----------
+   Same look as .db-cal-day, but rendered as <a> so a day can be navigated to.
+   .selected marks the day currently being viewed (distinct from "today"). */
+a.db-cal-day { text-decoration: none; cursor: pointer; transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast); }
+a.db-cal-day:hover { background: var(--color-primary-tint); color: var(--color-primary); transform: scale(1.06); }
+.db-cal-day.selected { box-shadow: 0 0 0 2px var(--color-primary); font-weight: 700; }
+.db-cal-day.selected.today { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-primary); }
+.db-calendar-nav { display: flex; align-items: center; gap: .4rem; }
+.db-calendar-nav a {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  color: var(--color-text-muted);
+  background: var(--color-bg);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.db-calendar-nav a:hover { background: var(--color-primary-tint); color: var(--color-primary); }
+
+@media (max-width: 480px) {
+  .db-donut-wrap { justify-content: center; }
+  .db-panel { padding: 1.15rem; }
+}

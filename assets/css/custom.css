@@ -1,0 +1,475 @@
+/* ==========================================================================
+   MediBook Design System — custom.css
+   Phase 1A: foundation only. Rules here are deliberately scoped to
+   Bootstrap component classes (.btn, .card, .table, .form-control, etc.)
+   and to brand-new utility classes — NOT to bare tags like `button`,
+   `input`, `table` — so nothing on the site's current Tailwind-based pages
+   changes yet. The two intentional global touches (body font + scrollbar)
+   are explicitly part of this phase's brief and are safe/additive.
+   ========================================================================== */
+
+/* ---------- Global typography (explicitly in scope for Phase 1A) ---------- */
+body {
+  font-family: var(--font-base);
+  color: var(--color-text);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-base);
+  font-weight: 600;
+}
+
+/* ---------- Custom scrollbar ---------- */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(var(--color-primary-rgb), .35);
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--color-bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--color-primary-rgb), .55);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--color-primary-rgb), .35) var(--color-bg);
+}
+
+/* ==========================================================================
+   Everything below targets Bootstrap classes only — dormant until a future
+   phase converts page markup from Tailwind to Bootstrap.
+   ========================================================================== */
+
+/* ---------- Buttons ---------- */
+.btn {
+  font-family: var(--font-base);
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  padding: .6rem 1.25rem;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+
+.btn-primary {
+  background: var(--gradient-primary);
+  border: none;
+  box-shadow: var(--shadow-primary);
+}
+.btn-primary:hover { filter: brightness(1.06); }
+
+.btn-secondary { background-color: var(--color-secondary); border-color: var(--color-secondary); }
+.btn-success   { background-color: var(--color-success);   border-color: var(--color-success); }
+.btn-warning   { background-color: var(--color-warning);   border-color: var(--color-warning); color: #fff; }
+.btn-danger    { background-color: var(--color-danger);    border-color: var(--color-danger); }
+
+.btn-outline-primary {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.btn-outline-primary:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-sm { padding: .4rem .9rem; font-size: var(--fs-sm); border-radius: var(--radius-sm); }
+.btn-lg { padding: .8rem 1.75rem; font-size: var(--fs-lg); border-radius: var(--radius-lg); }
+
+.btn-icon {
+  width: 40px; height: 40px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+}
+
+/* ---------- Cards ---------- */
+.card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+.card.card-hover-lift:hover {
+  transform: translateY(-4px);
+}
+.card-header {
+  background: transparent;
+  border-bottom: 1px solid var(--color-border);
+  font-weight: 600;
+  border-top-left-radius: var(--radius-lg) !important;
+  border-top-right-radius: var(--radius-lg) !important;
+}
+.card-header.card-header-gradient {
+  background: var(--gradient-primary);
+  color: #fff;
+  border-bottom: none;
+}
+
+/* ---------- Tables ---------- */
+.table {
+  --bs-table-border-color: var(--color-border);
+}
+.table thead th {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  border-bottom-width: 1px;
+  background: var(--color-bg);
+}
+.table-hover tbody tr:hover {
+  background-color: var(--color-primary-tint);
+}
+.table-rounded {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---------- Forms ---------- */
+.form-control,
+.form-select {
+  border-radius: var(--radius-md);
+  border-color: var(--color-border);
+  padding: .6rem .9rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 .2rem rgba(var(--color-primary-rgb), .15);
+}
+.form-label {
+  font-weight: 500;
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+  margin-bottom: .4rem;
+}
+.form-check-input:checked {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* ---------- Alerts ---------- */
+.alert {
+  border: none;
+  border-radius: var(--radius-md);
+  border-left: 4px solid transparent;
+}
+.alert-primary { background: var(--color-primary-tint); border-left-color: var(--color-primary); color: var(--color-primary); }
+.alert-success { background: var(--color-success-tint); border-left-color: var(--color-success); color: #067a56; }
+.alert-warning { background: var(--color-warning-tint); border-left-color: var(--color-warning); color: #92600a; }
+.alert-danger  { background: var(--color-danger-tint);  border-left-color: var(--color-danger);  color: #a92626; }
+.alert-info    { background: var(--color-secondary-tint); border-left-color: var(--color-secondary); color: #0a7d92; }
+
+/* ---------- Badges ---------- */
+.badge {
+  font-weight: 500;
+  padding: .4em .75em;
+  border-radius: var(--radius-pill);
+}
+.badge-soft-primary   { background: var(--color-primary-tint);   color: var(--color-primary); }
+.badge-soft-secondary { background: var(--color-secondary-tint); color: var(--color-secondary); }
+.badge-soft-success   { background: var(--color-success-tint);   color: #067a56; }
+.badge-soft-warning   { background: var(--color-warning-tint);   color: #92600a; }
+.badge-soft-danger    { background: var(--color-danger-tint);    color: #a92626; }
+.badge-soft-purple    { background: var(--color-purple-tint);    color: var(--color-purple); }
+.badge-soft-pink      { background: var(--color-pink-tint);      color: var(--color-pink); }
+.badge-soft-orange    { background: var(--color-orange-tint);    color: var(--color-orange); }
+
+/* ==========================================================================
+   Reusable utility classes — new class names, safe to use anywhere
+   (won't collide with Tailwind or Bootstrap utilities already in play).
+   ========================================================================== */
+
+/* Shadows */
+.shadow-soft { box-shadow: var(--shadow-sm) !important; }
+.shadow-medium { box-shadow: var(--shadow-md) !important; }
+.shadow-strong { box-shadow: var(--shadow-lg) !important; }
+.shadow-brand { box-shadow: var(--shadow-primary) !important; }
+
+/* Border radius */
+.rounded-sm-token { border-radius: var(--radius-sm) !important; }
+.rounded-md-token { border-radius: var(--radius-md) !important; }
+.rounded-lg-token { border-radius: var(--radius-lg) !important; }
+.rounded-xl-token { border-radius: var(--radius-xl) !important; }
+.rounded-pill-token { border-radius: var(--radius-pill) !important; }
+
+/* Surfaces */
+.surface-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.surface-muted {
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+}
+
+/* Gradient text / backgrounds */
+.text-gradient-primary {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.bg-gradient-primary { background: var(--gradient-primary) !important; color: #fff; }
+.bg-gradient-cool     { background: var(--gradient-cool) !important; color: #fff; }
+.bg-gradient-warm     { background: var(--gradient-warm) !important; color: #fff; }
+
+/* Brand color text/bg helpers (beyond Bootstrap's default palette) */
+.text-purple { color: var(--color-purple) !important; }
+.text-pink   { color: var(--color-pink) !important; }
+.text-orange { color: var(--color-orange) !important; }
+.bg-purple   { background-color: var(--color-purple) !important; color: #fff; }
+.bg-pink     { background-color: var(--color-pink) !important; color: #fff; }
+.bg-orange   { background-color: var(--color-orange) !important; color: #fff; }
+
+/* Avatar */
+.avatar-circle {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+.avatar-circle-lg { width: 72px; height: 72px; }
+.avatar-circle-sm { width: 30px; height: 30px; }
+
+/* Status dot */
+.status-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+.status-dot-success { background: var(--color-success); }
+.status-dot-warning { background: var(--color-warning); }
+.status-dot-danger  { background: var(--color-danger); }
+.status-dot-muted   { background: var(--color-text-soft); }
+
+/* Glass panel (for hero sections / overlays) */
+.glass-panel {
+  background: rgba(255, 255, 255, .14);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, .25);
+  border-radius: var(--radius-lg);
+}
+
+/* Empty-state helper */
+.empty-state {
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+  color: var(--color-text-muted);
+}
+.empty-state i { font-size: 2.5rem; color: var(--color-text-soft); margin-bottom: var(--space-3); }
+
+/* ==========================================================================
+   Time Slot picker (Phase 3B)
+   Reusable grid of pill-shaped slots. Two flavors:
+   - .slot-pill (with a real <input>) for interactive selection, e.g. the
+     Book Appointment form — the underlying <input name="..."> is what gets
+     submitted, so no booking logic changes; this is purely how it looks.
+   - .slot-static (no input) for read-only views, e.g. Doctor Schedule,
+     to show a day already booked/free without being clickable.
+   ========================================================================== */
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  gap: .65rem;
+}
+.slot-pill { position: relative; }
+.slot-pill input {
+  position: absolute;
+  opacity: 0;
+  width: 100%; height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+.slot-pill span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  padding: .65rem .5rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+.slot-pill:hover span { border-color: var(--color-primary); color: var(--color-primary); transform: translateY(-1px); }
+.slot-pill input:checked + span {
+  background: var(--gradient-primary);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: var(--shadow-primary);
+}
+.slot-pill input:focus-visible + span { outline: 3px solid var(--color-primary-tint); outline-offset: 2px; }
+
+.slot-static {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  padding: .65rem .5rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-align: center;
+}
+.slot-static.slot-free { background: var(--color-success-tint); border-color: transparent; color: #067A55; }
+.slot-static.slot-booked { background: var(--color-danger-tint); border-color: transparent; color: #B91C1C; flex-direction: column; gap: .1rem; }
+.slot-static.slot-booked small { font-weight: 500; font-size: var(--fs-xs); opacity: .85; }
+.slot-static.slot-unavailable { background: var(--color-bg); color: var(--color-text-soft); border-style: dashed; }
+
+.slot-legend { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: var(--fs-sm); color: var(--color-text-muted); }
+.slot-legend .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: .4rem; }
+
+/* ==========================================================================
+   Weekday chips (Doctor Schedule availability strip)
+   ========================================================================== */
+.weekday-strip { display: flex; flex-wrap: wrap; gap: .5rem; }
+.weekday-chip {
+  width: 46px; height: 46px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  background: var(--color-bg);
+  color: var(--color-text-soft);
+  border: 1.5px solid var(--color-border);
+}
+.weekday-chip.on { background: var(--gradient-primary); color: #fff; border-color: transparent; box-shadow: var(--shadow-primary); }
+
+/* ==========================================================================
+   Phase 5 — Global polish pass
+   Everything below is additive/global: smooth scroll, page transition,
+   automatic hover/entrance treatment for panels that never opted in, and a
+   couple of small reusable components (hero, doctor card) used to bring the
+   still-Tailwind-only index.php / doctors.php up to the same visual bar as
+   the rest of the app. No existing rule above this line was changed.
+   ========================================================================== */
+
+/* ---------- Smooth scrolling + page transition (explicitly in scope) ---------- */
+html { scroll-behavior: smooth; }
+body { animation: fadeIn .35s ease both; }
+
+/* ---------- Safety nets: overflow / broken images ---------- */
+img { max-width: 100%; height: auto; }
+.table-responsive, .crud-table-scroll { max-width: 100%; }
+pre, code { white-space: pre-wrap; word-break: break-word; }
+
+/* ---------- Button consistency: a couple of states every .btn should have ---------- */
+.btn:focus-visible, .mb-btn:focus-visible {
+  outline: 3px solid var(--color-primary-tint);
+  outline-offset: 2px;
+}
+.btn:disabled, .btn[disabled] { opacity: .65; cursor: not-allowed; transform: none !important; }
+.btn.is-loading { color: transparent !important; pointer-events: none; position: relative; }
+.btn.is-loading::after {
+  content: "";
+  position: absolute; left: 50%; top: 50%;
+  width: 16px; height: 16px; margin: -8px 0 0 -8px;
+  border: 2px solid rgba(255,255,255,.55); border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+}
+.btn-outline-primary.is-loading::after,
+.btn-light.is-loading::after,
+.mb-btn-ghost.is-loading::after {
+  border-color: rgba(var(--color-primary-rgb), .35);
+  border-top-color: var(--color-primary);
+}
+
+/* ---------- Card hover, extended to panels that never had it ----------
+   .db-panel already had a shadow-only hover — this adds a matching lift.
+   .crud-table-card had none. Both guarded so nothing double-animates. */
+.db-panel {
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.db-panel:hover { transform: translateY(-3px); }
+.crud-table-card {
+  transition: box-shadow var(--transition-base);
+}
+.crud-table-card:hover { box-shadow: var(--shadow-lg); }
+
+/* ---------- Entrance fade for panels that don't already animate in ----------
+   .db-fade-in (dashboards) and .mb-auth-card (auth.css's own mbCardIn) keep
+   their existing animations untouched — this only fires for elements that
+   never opted into either system. */
+.crud-table-card:not(.db-fade-in),
+.db-panel:not(.db-fade-in) {
+  animation: fadeInUp var(--transition-slow) ease both;
+}
+
+/* ---------- Loading spinner overlay (shown on initial page load only) ---------- */
+.mb-page-loader {
+  position: fixed; inset: 0;
+  z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--color-bg);
+  transition: opacity var(--transition-slow), visibility var(--transition-slow);
+}
+.mb-page-loader.mb-loader-hide { opacity: 0; visibility: hidden; pointer-events: none; }
+.mb-page-loader .spinner-brand { width: 2.75rem; height: 2.75rem; border-width: 4px; }
+
+/* ---------- Toast container tweaks (SweetAlert2 toasts, Phase 5) ---------- */
+.swal2-toast { font-family: var(--font-base) !important; border-radius: var(--radius-md) !important; box-shadow: var(--shadow-lg) !important; }
+
+/* ---------- Hero (homepage) — reuses existing tokens/gradients ---------- */
+.mb-hero {
+  background: var(--gradient-cool);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  padding: 5.5rem 1.5rem;
+  text-align: center;
+}
+.mb-hero::before, .mb-hero::after {
+  content: ""; position: absolute; border-radius: 50%;
+  background: rgba(255,255,255,.10);
+}
+.mb-hero::before { width: 420px; height: 420px; top: -180px; right: -120px; }
+.mb-hero::after { width: 280px; height: 280px; bottom: -150px; left: -90px; background: rgba(139,92,246,.18); }
+.mb-hero-inner { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+.mb-hero h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; margin-bottom: 1.25rem; }
+.mb-hero p { font-size: var(--fs-lg); opacity: .94; margin-bottom: 2rem; }
+.mb-hero-actions { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+.feature-icon-circle {
+  width: 64px; height: 64px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; color: #fff;
+  margin: 0 auto 1.25rem;
+  box-shadow: var(--shadow-md);
+}
+
+/* ---------- Doctor card (doctors.php listing) ---------- */
+.mb-doctor-card { height: 100%; display: flex; flex-direction: column; }
+.mb-doctor-card .card-body { display: flex; flex-direction: column; flex: 1; }
+.mb-doctor-card .mb-doctor-fee { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--color-border); display: flex; align-items: center; justify-content: space-between; }
+
+/* ---------- Typography touch-ups ---------- */
+.section-title { font-weight: 700; letter-spacing: -.01em; }
+.text-muted-soft { color: var(--color-text-soft); }
+
+/* ---------- Responsive fine-tuning ---------- */
+@media (max-width: 575.98px) {
+  .mb-hero { padding: 3.5rem 1.25rem; }
+  .mb-hero-actions { flex-direction: column; align-items: stretch; }
+  .mb-hero-actions .btn, .mb-hero-actions .mb-btn { width: 100%; justify-content: center; }
+}

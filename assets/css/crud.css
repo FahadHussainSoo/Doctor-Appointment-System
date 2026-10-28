@@ -1,0 +1,228 @@
+/* ==========================================================================
+   MediBook — crud.css (Phase 3A)
+   Tables, CRUD pages, forms and modals across the Admin/Doctor management
+   pages: rounded DataTables, sticky headers, status badges, search box,
+   pagination, Bootstrap 5 modal + form polish.
+   Presentation only — no query or form-field changes live here.
+   ========================================================================== */
+
+/* ---------- Page toolbar (title + primary action) ---------- */
+.crud-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin-bottom: 1.5rem;
+}
+.crud-toolbar h1 { margin: 0; }
+.crud-add-btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .65rem 1.25rem;
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: #fff; font-weight: 600; font-size: var(--fs-sm);
+  border: none; cursor: pointer; text-decoration: none;
+  box-shadow: var(--shadow-primary);
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+.crud-add-btn:hover { transform: translateY(-2px); filter: brightness(1.05); color: #fff; }
+
+/* ---------- Table card wrapper (rounded, glass) ---------- */
+.crud-table-card {
+  background: rgba(255,255,255,.85);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.6);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.crud-table-card .crud-table-header {
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem;
+}
+.crud-table-card .crud-table-header h2 { font-size: var(--fs-lg); font-weight: 700; color: var(--color-text); margin: 0; }
+.crud-table-scroll { padding: 0 1.5rem 1.5rem; }
+
+/* ---------- Rounded, sticky-header DataTable styling ---------- */
+table.mb-datatable {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0;
+  font-size: var(--fs-sm);
+}
+table.mb-datatable thead th {
+  position: sticky;
+  top: 72px; /* sits just under the dashboard top bar while the page scrolls */
+  z-index: 5;
+  background: #F9FAFB;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  font-size: .7rem;
+  letter-spacing: .04em;
+  font-weight: 700;
+  padding: .9rem 1rem !important;
+  border-bottom: 2px solid var(--color-border) !important;
+}
+table.mb-datatable thead th:first-child { border-top-left-radius: var(--radius-md); }
+table.mb-datatable thead th:last-child { border-top-right-radius: var(--radius-md); }
+table.mb-datatable tbody td {
+  padding: .9rem 1rem !important;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--color-border) !important;
+  color: var(--color-text);
+}
+table.mb-datatable tbody tr { transition: background var(--transition-fast); }
+table.mb-datatable tbody tr:hover { background: var(--color-primary-tint); }
+table.mb-datatable tbody tr:last-child td { border-bottom: none !important; }
+
+/* DataTables default chrome → restyle to match the design system */
+.dataTables_wrapper { padding-top: .25rem; }
+.dataTables_wrapper .dataTables_filter { float: none; margin-bottom: 1rem; }
+.dataTables_wrapper .dataTables_filter label {
+  display: flex; align-items: center; gap: .5rem;
+  font-size: var(--fs-sm); color: var(--color-text-muted); font-weight: 500;
+}
+.dataTables_wrapper .dataTables_filter input {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: .5rem 1rem .5rem 2.2rem;
+  font-size: var(--fs-sm);
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat .7rem center;
+  background-size: 15px;
+  min-width: 240px;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.dataTables_wrapper .dataTables_filter input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-tint);
+}
+.dataTables_wrapper .dataTables_length select {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: .35rem .6rem;
+  font-size: var(--fs-sm);
+}
+.dataTables_wrapper .dataTables_info {
+  font-size: var(--fs-xs);
+  color: var(--color-text-soft);
+  padding-top: 1rem !important;
+}
+.dataTables_wrapper .dataTables_paginate {
+  padding-top: 1rem !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  border-radius: var(--radius-sm) !important;
+  padding: .4rem .75rem !important;
+  margin-left: .25rem !important;
+  border: 1px solid transparent !important;
+  color: var(--color-text-muted) !important;
+  font-size: var(--fs-sm);
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background: var(--gradient-primary) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: var(--shadow-primary);
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.current) {
+  background: var(--color-primary-tint) !important;
+  color: var(--color-primary) !important;
+  border: none !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled { opacity: .4; }
+
+/* ---------- Status badges ---------- */
+.crud-badge {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .3rem .7rem;
+  border-radius: var(--radius-pill);
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+.crud-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.crud-badge-active,
+.crud-badge-confirmed  { background: var(--color-success-tint); color: #067A55; }
+.crud-badge-scheduled  { background: rgba(245,158,11,.15); color: #B45309; }
+.crud-badge-completed  { background: var(--color-primary-tint); color: var(--color-primary); }
+.crud-badge-cancelled,
+.crud-badge-inactive   { background: var(--color-danger-tint); color: #B91C1C; }
+.crud-badge-admin      { background: var(--color-purple-tint); color: #6D28D9; }
+.crud-badge-doctor     { background: var(--color-secondary-tint); color: #0E7490; }
+.crud-badge-patient    { background: var(--color-primary-tint); color: var(--color-primary); }
+
+/* ---------- Row action buttons ---------- */
+.crud-actions { display: flex; gap: .4rem; flex-wrap: wrap; }
+.crud-act-btn {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .4rem .75rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  border: none; cursor: pointer; text-decoration: none;
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+.crud-act-btn:hover { transform: translateY(-1px); }
+.crud-act-edit { background: rgba(245,158,11,.15); color: #B45309; }
+.crud-act-edit:hover { background: #F59E0B; color: #fff; }
+.crud-act-view { background: var(--color-primary-tint); color: var(--color-primary); }
+.crud-act-view:hover { background: var(--color-primary); color: #fff; }
+.crud-act-delete { background: var(--color-danger-tint); color: #B91C1C; }
+.crud-act-delete:hover { background: #EF4444; color: #fff; }
+
+/* ---------- Bootstrap 5 modal polish ---------- */
+.modal-content {
+  border: none;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.modal-header {
+  background: var(--gradient-primary);
+  color: #fff;
+  border-bottom: none;
+  padding: 1.25rem 1.5rem;
+}
+.modal-header .modal-title { font-weight: 700; display: flex; align-items: center; gap: .55rem; }
+.modal-header .btn-close { filter: invert(1) grayscale(1) brightness(2); opacity: .85; }
+.modal-body { padding: 1.5rem; background: #fff; }
+.modal-footer { border-top: 1px solid var(--color-border); padding: 1rem 1.5rem; background: #fff; }
+.modal-footer .btn-primary {
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  box-shadow: var(--shadow-primary);
+}
+.modal-footer .btn-secondary {
+  border-radius: var(--radius-md);
+  font-weight: 600;
+}
+.modal-footer .btn-danger { border-radius: var(--radius-md); font-weight: 600; }
+
+/* ---------- Bootstrap 5 form controls, aligned to the design system ---------- */
+.crud-form .form-label { font-weight: 600; font-size: var(--fs-sm); color: var(--color-text); margin-bottom: .35rem; }
+.crud-form .form-control,
+.crud-form .form-select {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: .6rem .85rem;
+  font-size: var(--fs-sm);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.crud-form .form-control:focus,
+.crud-form .form-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-tint);
+}
+.crud-form .form-text { color: var(--color-text-soft); font-size: var(--fs-xs); }
+
+@media (max-width: 640px) {
+  .dataTables_wrapper .dataTables_filter input { min-width: 0; width: 100%; }
+  table.mb-datatable thead th { top: 0; }
+}

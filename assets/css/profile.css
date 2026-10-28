@@ -1,0 +1,302 @@
+/* ==========================================================================
+   MediBook — profile.css (Phase 4)
+   Profile & Settings redesign: hero header, tabs, timeline, activity feed,
+   upload dropzone, info-list rows, mini stat cards, and dark-mode tokens.
+   Built entirely on the existing design tokens in variables.css — new
+   class names only, nothing here overrides earlier phases.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------
+   Dark mode — token overrides. Because every earlier phase already
+   consumes var(--color-*) instead of hardcoded hex, re-pointing the
+   tokens here re-themes cards/tables/forms/panels app-wide for free.
+   Toggled via <html data-theme="dark">, set by assets/js/profile.js.
+   -------------------------------------------------------------------- */
+[data-theme="dark"] {
+  --color-bg:         #0F1420;
+  --color-surface:    #161C2C;
+  --color-border:     #2A3349;
+  --color-text:       #E5E7EB;
+  --color-text-muted: #9AA3B8;
+  --color-text-soft:  #6B7488;
+
+  --bs-body-bg: var(--color-bg);
+  --bs-body-color: var(--color-text);
+  --bs-card-bg: var(--color-surface);
+  --bs-card-color: var(--color-text);
+  --bs-border-color: var(--color-border);
+  --bs-table-bg: var(--color-surface);
+  --bs-table-color: var(--color-text);
+  --bs-modal-bg: var(--color-surface);
+  color-scheme: dark;
+}
+[data-theme="dark"] body,
+[data-theme="dark"] body.bg-gray-50,
+[data-theme="dark"] body.bg-gray-100 {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text);
+}
+[data-theme="dark"] .surface-muted { background: #10182b; }
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+[data-theme="dark"] .form-control::placeholder { color: var(--color-text-soft); }
+[data-theme="dark"] .table thead th { background: #10182b; }
+[data-theme="dark"] .mb-topbar,
+[data-theme="dark"] .mb-navbar.glass,
+[data-theme="dark"] .mb-dash-topbar.glass { background: rgba(15, 20, 32, .85); }
+[data-theme="dark"] .db-panel,
+[data-theme="dark"] .crud-table-card { background: var(--color-surface); }
+
+/* --------------------------------------------------------------------
+   Theme toggle switch (topbar)
+   -------------------------------------------------------------------- */
+.mb-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .18);
+  background: rgba(255, 255, 255, .06);
+  color: inherit;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.mb-theme-toggle:hover { background: rgba(255, 255, 255, .14); transform: translateY(-1px); }
+.mb-theme-toggle .fa-sun { display: none; color: #FBBF24; }
+[data-theme="dark"] .mb-theme-toggle .fa-sun { display: inline; }
+[data-theme="dark"] .mb-theme-toggle .fa-moon { display: none; }
+
+/* --------------------------------------------------------------------
+   Profile hero — cover band + overlapping avatar + identity + meta
+   -------------------------------------------------------------------- */
+.profile-hero {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--gradient-primary);
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 4.25rem;
+}
+.profile-hero-cover {
+  height: 148px;
+  background:
+    radial-gradient(circle at 15% 30%, rgba(255,255,255,.16), transparent 45%),
+    radial-gradient(circle at 85% 70%, rgba(255,255,255,.14), transparent 50%),
+    var(--gradient-primary);
+  position: relative;
+}
+.profile-hero-cover::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.18) 100%);
+}
+.profile-hero-body {
+  background: var(--color-surface);
+  padding: 3.75rem 1.75rem 1.5rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+.profile-hero-avatar-wrap {
+  position: absolute;
+  top: 108px;
+  left: 1.75rem;
+  z-index: 2;
+}
+.profile-avatar {
+  width: 108px; height: 108px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid var(--color-surface);
+  box-shadow: var(--shadow-md);
+  background: var(--color-primary-tint);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.25rem; font-weight: 700; color: var(--color-primary);
+}
+.profile-avatar-edit {
+  position: absolute;
+  bottom: 4px; right: 4px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  border: 3px solid var(--color-surface);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: .8rem;
+  transition: transform var(--transition-fast), background var(--transition-fast);
+}
+.profile-avatar-edit:hover { transform: scale(1.08); background: var(--color-primary-dark, var(--color-primary)); }
+.profile-hero-identity { flex: 1; min-width: 220px; }
+.profile-hero-name { font-size: var(--fs-2xl); font-weight: 700; color: var(--color-text); margin: 0; }
+.profile-hero-role {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-size: var(--fs-sm); font-weight: 600; color: var(--color-primary);
+  background: var(--color-primary-tint); padding: .2rem .7rem; border-radius: var(--radius-pill);
+  margin-top: .4rem;
+}
+.profile-hero-meta { display: flex; flex-wrap: wrap; gap: 1.1rem; margin-top: .65rem; color: var(--color-text-muted); font-size: var(--fs-sm); }
+.profile-hero-meta span { display: inline-flex; align-items: center; gap: .4rem; }
+.profile-hero-meta i { color: var(--color-text-soft); }
+.profile-hero-actions { display: flex; gap: .6rem; align-self: center; }
+
+/* --------------------------------------------------------------------
+   Tabs
+   -------------------------------------------------------------------- */
+.mb-tabs {
+  display: flex;
+  gap: .3rem;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+}
+.mb-tab-btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .75rem 1.1rem;
+  font-size: var(--fs-sm); font-weight: 600;
+  color: var(--color-text-muted);
+  background: none; border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+.mb-tab-btn:hover { color: var(--color-text); }
+.mb-tab-btn.active { color: var(--color-primary); border-bottom-color: var(--color-primary); }
+.mb-tab-panel { display: none; }
+.mb-tab-panel.active { display: block; animation: mbFadeIn var(--transition-slow); }
+@keyframes mbFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* --------------------------------------------------------------------
+   Info list — label/value rows inside a card (read-only details)
+   -------------------------------------------------------------------- */
+.info-list { margin: 0; }
+.info-row {
+  display: flex; justify-content: space-between; gap: 1rem;
+  padding: .7rem 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--fs-sm);
+}
+.info-row:last-child { border-bottom: none; }
+.info-row dt { color: var(--color-text-muted); font-weight: 500; }
+.info-row dd { margin: 0; color: var(--color-text); font-weight: 600; text-align: right; }
+
+/* --------------------------------------------------------------------
+   Mini stat cards (compact variant of db-stat-card, for profile pages)
+   -------------------------------------------------------------------- */
+.mini-stat {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.1rem 1.25rem;
+  display: flex; align-items: center; gap: .9rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.mini-stat:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.mini-stat-icon {
+  width: 46px; height: 46px; border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; color: #fff; flex-shrink: 0;
+}
+.mini-stat-value { font-size: var(--fs-xl); font-weight: 700; color: var(--color-text); line-height: 1.1; }
+.mini-stat-label { font-size: var(--fs-xs); color: var(--color-text-muted); text-transform: uppercase; letter-spacing: .04em; margin-top: .15rem; }
+
+/* --------------------------------------------------------------------
+   Timeline (appointment history / account timeline)
+   -------------------------------------------------------------------- */
+.timeline { position: relative; margin: 0; padding-left: 2rem; }
+.timeline::before {
+  content: '';
+  position: absolute; left: 9px; top: 6px; bottom: 6px;
+  width: 2px; background: var(--color-border);
+}
+.timeline-item { position: relative; padding-bottom: 1.6rem; }
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-dot {
+  position: absolute; left: -2rem; top: 2px;
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .65rem; color: #fff;
+  border: 3px solid var(--color-surface);
+  box-shadow: 0 0 0 1px var(--color-border);
+}
+.timeline-content { background: var(--color-bg); border-radius: var(--radius-md); padding: .8rem 1rem; }
+.timeline-title { font-weight: 600; font-size: var(--fs-sm); color: var(--color-text); }
+.timeline-meta { font-size: var(--fs-xs); color: var(--color-text-muted); margin-top: .15rem; }
+.timeline-empty { color: var(--color-text-muted); font-size: var(--fs-sm); padding: 1rem 0; }
+
+/* --------------------------------------------------------------------
+   Activity feed (compact list, e.g. recent system activity for admin)
+   -------------------------------------------------------------------- */
+.activity-item {
+  display: flex; align-items: flex-start; gap: .8rem;
+  padding: .75rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.activity-item:last-child { border-bottom: none; }
+.activity-icon {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .8rem; color: #fff; flex-shrink: 0;
+}
+.activity-text { font-size: var(--fs-sm); color: var(--color-text); }
+.activity-text strong { color: var(--color-text); }
+.activity-time { font-size: var(--fs-xs); color: var(--color-text-soft); margin-top: .1rem; }
+
+/* --------------------------------------------------------------------
+   Upload dropzone (avatar / document uploads)
+   -------------------------------------------------------------------- */
+.upload-dropzone {
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem 1.25rem;
+  text-align: center;
+  color: var(--color-text-muted);
+  background: var(--color-bg);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+.upload-dropzone:hover,
+.upload-dropzone.is-dragover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-tint);
+  color: var(--color-primary);
+}
+.upload-dropzone i { font-size: 1.6rem; margin-bottom: .5rem; display: block; }
+.upload-dropzone input[type="file"] { display: none; }
+.upload-filename { font-size: var(--fs-sm); font-weight: 600; color: var(--color-text); margin-top: .5rem; }
+
+/* --------------------------------------------------------------------
+   Password strength meter (Settings → Security)
+   -------------------------------------------------------------------- */
+.pw-strength-track { height: 6px; border-radius: var(--radius-pill); background: var(--color-border); overflow: hidden; margin-top: .5rem; }
+.pw-strength-fill { height: 100%; width: 0%; border-radius: var(--radius-pill); background: var(--color-danger); transition: width var(--transition-base), background var(--transition-base); }
+.pw-strength-label { font-size: var(--fs-xs); color: var(--color-text-muted); margin-top: .3rem; }
+
+/* --------------------------------------------------------------------
+   Preference switch row (Settings → Preferences)
+   -------------------------------------------------------------------- */
+.pref-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-border);
+  gap: 1rem;
+}
+.pref-row:last-child { border-bottom: none; }
+.pref-row-label { font-weight: 600; font-size: var(--fs-sm); color: var(--color-text); }
+.pref-row-desc { font-size: var(--fs-xs); color: var(--color-text-muted); margin-top: .15rem; }
+
+@media (max-width: 640px) {
+  .profile-hero-body { padding-top: 3.5rem; flex-direction: column; align-items: flex-start; }
+  .profile-hero-avatar-wrap { left: 1.25rem; top: 100px; }
+  .profile-avatar { width: 88px; height: 88px; font-size: 1.8rem; }
+  .profile-hero-actions { align-self: flex-start; }
+}
